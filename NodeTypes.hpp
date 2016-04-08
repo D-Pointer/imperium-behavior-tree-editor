@@ -1,0 +1,4 @@
+#ifndef ITEMTYPES_HPP
+#define ITEMTYPES_HPP
+
+#endif // ITEMTYPES_HPP
