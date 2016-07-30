@@ -13,8 +13,17 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        MainWindow.cpp \
+    NewNodeDialog.cpp \
+    NodeTypes.cpp \
+    Serializer.cpp \
+    Tree.cpp
 
-HEADERS  += MainWindow.hpp
+HEADERS  += MainWindow.hpp \
+    NewNodeDialog.hpp \
+    NodeTypes.hpp \
+    Serializer.hpp \
+    Tree.hpp
 
-FORMS    += MainWindow.ui
+FORMS    += MainWindow.ui \
+    NewNodeDialog.ui
