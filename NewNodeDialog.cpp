@@ -5,13 +5,34 @@
 #include "NewNodeDialog.hpp"
 #include "ui_NewNodeDialog.h"
 
-NewNodeDialog::NewNodeDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::NewNodeDialog) {
+NewNodeDialog::NewNodeDialog(Node * node, QWidget *parent) : QDialog(parent), ui(new Ui::NewNodeDialog), m_node(node) {
     ui->setupUi(this);
 
+    if ( m_node ) {
+        ui->category->setCurrentIndex( node->getCategory() );
+
+        // update the node when we're done
+        connect( ui->buttonBox, &QDialogButtonBox::accepted, this, &NewNodeDialog::updateNode );
+    }
+
     categoryChanged( ui->category->currentIndex() );
+
+    if ( m_node ) {
+        for ( int index = 0; index < ui->type->count(); ++index ) {
+            if ( ui->type->itemData( index ).toInt() == node->getType() ) {
+                ui->type->setCurrentIndex( index );
+                break;
+            }
+        }
+    }
+
     typeChanged( ui->type->currentIndex() );
+
+    // finally set the value as typeChanged() above sets it to 0
+    if ( m_node ) {
+        ui->value->setValue( node->getValue() );
+    }
+
     connect( ui->category, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)) );
     connect( ui->type, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
 }
@@ -48,5 +69,16 @@ void NewNodeDialog::typeChanged (int index) {
     NodeData & data( nodeData[ ui->type->currentData().toInt()] );
 
     ui->value->setEnabled( data.m_hasValue );
-    ui->value->setValue( data.m_value );
+    ui->value->setValue( 0 );
+}
+
+
+void NewNodeDialog::updateNode () {
+    // precautions
+    if ( ! m_node ) {
+        return;
+    }
+
+    m_node->setData( nodeData[ ui->type->currentData().toInt()] );
+    m_node->setValue( ui->value->value() );
 }

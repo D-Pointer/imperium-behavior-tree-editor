@@ -29,6 +29,8 @@ private slots:
     void showContextMenu(const QPoint&);
     void newNode ();
     void deleteNode ();
+    void editNode ();
+    void includeSubtree ();
 
 
 private:

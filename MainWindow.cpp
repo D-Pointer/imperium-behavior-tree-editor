@@ -22,13 +22,20 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->m_saveAsAction, &QAction::triggered, this, &MainWindow::saveTreeAs );
     connect( ui->m_quitAction, &QAction::triggered, this, &MainWindow::quitEditor );
 
+    // tree widget signals
+    connect( ui->tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), SLOT(editNode()) );
+
     // add the actions to the window so that shortcuts work
     addAction( ui->m_newNodeAction );
     addAction( ui->m_deleteNodeAction );
+    addAction( ui->m_includeSubtreeAction );
+    addAction( ui->m_editNodeAction );
 
     // create the popup menu
     connect( ui->m_newNodeAction, &QAction::triggered, this, &MainWindow::newNode );
     connect( ui->m_deleteNodeAction, &QAction::triggered, this, &MainWindow::deleteNode );
+    connect( ui->m_editNodeAction, &QAction::triggered, this, &MainWindow::editNode );
+    connect( ui->m_includeSubtreeAction, &QAction::triggered, this, &MainWindow::includeSubtree );
 
     // create the root
     m_root = new Node( nodeData[kRootType], ui->tree );
@@ -125,10 +132,12 @@ void MainWindow::showContextMenu(const QPoint& pos) {
     // we can not add to leaf nodes
     if ( node->isComposite() ) {
         popup.addAction( ui->m_newNodeAction );
+        popup.addAction( ui->m_includeSubtreeAction );
     }
 
     // root can not be deleted
     if ( ! node->isRoot() ) {
+        popup.addAction( ui->m_editNodeAction );
         popup.addAction( ui->m_deleteNodeAction );
     }
 
@@ -162,4 +171,23 @@ void MainWindow::deleteNode () {
     if ( QMessageBox::question( this, "Confirm", QString("Really delete the '%1' node?").arg(node->getTypeText()), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes ) {
         delete node;
     }
+}
+
+
+void MainWindow::editNode () {
+    Node * node = dynamic_cast<Node *>( ui->tree->currentItem() );
+    if ( ! node ) {
+        qDebug() << "MainWindow::editNode: no current item";
+        return;
+    }
+
+    NewNodeDialog dialog( node );
+    if ( dialog.exec() == QDialog::Accepted ) {
+        node->setup();
+    }
+}
+
+
+void MainWindow::includeSubtree () {
+    qDebug() << "MainWindow::includeSubtree";
 }

@@ -122,6 +122,22 @@
     <string>Ctrl+O</string>
    </property>
   </action>
+  <action name="m_includeSubtreeAction">
+   <property name="text">
+    <string>Include subtree</string>
+   </property>
+   <property name="toolTip">
+    <string>Include a subtree from another file</string>
+   </property>
+  </action>
+  <action name="m_editNodeAction">
+   <property name="text">
+    <string>Edit node</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit the current node</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

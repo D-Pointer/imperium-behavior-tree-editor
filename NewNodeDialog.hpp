@@ -13,7 +13,7 @@ class NewNodeDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit NewNodeDialog(QWidget *parent = 0);
+    explicit NewNodeDialog (Node *node = nullptr, QWidget *parent = nullptr);
     ~NewNodeDialog();
 
 
@@ -26,9 +26,14 @@ private slots:
     void categoryChanged (int index);
     void typeChanged (int index);
 
+    void updateNode ();
+
 
 private:
     Ui::NewNodeDialog *ui;
+
+    // the optional edited node
+    Node * m_node;
 };
 
 #endif // NEWNODEDIALOG_HPP

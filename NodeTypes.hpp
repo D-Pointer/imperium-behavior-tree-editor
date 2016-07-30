@@ -85,71 +85,70 @@ struct NodeData {
     QString m_serializedId;
     bool m_leaf;
     bool m_hasValue;
-    int m_value;
 };
 
 static NodeData nodeData[] = {
     // composite
-    { kRootType, kRoot, "Root", "Composite", "Root", false, false, 0 },
-    { kSequence, kComposite, "Sequence", "Composite", "Sequence", false, false, 0, },
-    { kSelector, kComposite, "Selector", "Composite", "Selector", false, false, 0, },
+    { kRootType, kRoot, "Root", "Composite", "Root", false, false },
+    { kSequence, kComposite, "Sequence", "Composite", "Sequence", false, false, },
+    { kSelector, kComposite, "Selector", "Composite", "Selector", false, false, },
 
     // decorators
-    { kSucceeder, kDecorator, "Succeeder", "Decorator", "Succeeder", false, false, 0, },
-    { kFailer, kDecorator, "Failer", "Decorator", "Failer", false, false, 0, },
-    { kLimiter, kDecorator, "Limiter", "Decorator", "Limiter", false, true, 0 },
-    { kInverter, kDecorator, "Inverter", "Inverter", "Inverter", false, false, 0 },
-    { kRepeater, kDecorator, "Repeater", "Decorator", "Repeater", false, true, 0 },
-    { kRepeatUntilFail, kDecorator, "Repeat until fail", "Decorator", "RepeatUntilFail", false, true, 0 },
-    { kRepeatUntilSucceed, kDecorator, "Repeat until succeed", "Decorator", "RepeatUntilSucceed", false, true, 0 },
+    { kSucceeder, kDecorator, "Succeeder", "Decorator", "Succeeder", false, false, },
+    { kFailer, kDecorator, "Failer", "Decorator", "Failer", false, false, },
+    { kLimiter, kDecorator, "Limiter", "Decorator", "Limiter", false, true },
+    { kInverter, kDecorator, "Inverter", "Inverter", "Inverter", false, false },
+    { kRepeater, kDecorator, "Repeater", "Decorator", "Repeater", false, true },
+    { kRepeatUntilFail, kDecorator, "Repeat until fail", "Decorator", "RepeatUntilFail", false, true },
+    { kRepeatUntilSucceed, kDecorator, "Repeat until succeed", "Decorator", "RepeatUntilSucceed", false, true },
 
     // unit conditions
-    { kCanAssault, kCondition, "Can assault", "Condition", "CanAssault", true, false, 0 },
-    { kCanRally, kCondition, "Can rally", "Condition", "CanRally", true, false, 0 },
-    { kHasAmmo, kCondition, "Has ammo", "Condition", "HasAmmo", true, false, 0 },
-    { kHasEnemiesInFieldOfFire, kCondition, "Has X enemies in field of fire", "Condition", "HasEnemiesInFof", true, true, 0 },
-    { kHasEnemiesInRange, kCondition, "Has X enemies in range", "Condition", "HasEnemiesInRange", true, true, 0 },
-    { kHasHq, kCondition, "Has HQ", "Condition", "HasHq", true, false, 0 },
-    { kHasMission, kCondition, "Has mission", "Condition", "HasMission", true, false, 0 },
-    { kHasTarget, kCondition, "Has target", "Condition", "HasTarget", true, false, 0 },
-    { kIsColumnMode, kCondition, "In column mode", "Condition", "IsColumnMode", true, false, 0 },
-    { kIsFormationMode, kCondition, "In formation mode", "Condition", "IsFormationMode", true, false, 0 },
-    { kIsFullStrength, kCondition, "Is full strength", "Condition", "IsFullStrength", true, false, 0 },
-    { kIsHalfStrength, kCondition, "Is half strength", "Condition", "IsHalfStrength", true, false, 0 },
-    { kIsHq, kCondition, "Is HQ", "Condition", "IsHq", true, false, 0 },
-    { kIsIndirectFireUnit, kCondition, "Is indirect fire unit", "Condition", "IsIndirectFireUnit", true, false, 0 },
-    { kIsLowStrength, kCondition, "Is low strength", "Condition", "IsLowStrength", true, false, 0 },
-    { kIsSupportUnit, kCondition, "Is support unit", "Condition", "IsSupportUnit", true, false, 0 },
-    { kIsUnderFire, kCondition, "Is under fire", "Condition", "IsUnderFire", true, false, 0 },
-    { kMorale, kCondition, "Morale over X", "Condition", "IsMmoraleOver", true, true, 0 },
-    { kFatigue, kCondition, "Fatigue over X", "Condition", "IsFatigueOver", true, true, 0 },
-    { kSeesEnemies, kCondition, "Sees X enemies", "Condition", "SeesEnemies", true, true, 0 },
+    { kCanAssault, kCondition, "Can assault", "Condition", "CanAssault", true, false },
+    { kCanRally, kCondition, "Can rally", "Condition", "CanRally", true, false },
+    { kHasAmmo, kCondition, "Has ammo", "Condition", "HasAmmo", true, false },
+    { kHasEnemiesInFieldOfFire, kCondition, "Has X enemies in field of fire", "Condition", "HasEnemiesInFof", true, true },
+    { kHasEnemiesInRange, kCondition, "Has X enemies in range", "Condition", "HasEnemiesInRange", true, true },
+    { kHasHq, kCondition, "Has HQ", "Condition", "HasHq", true, false },
+    { kHasMission, kCondition, "Has mission", "Condition", "HasMission", true, false },
+    { kHasTarget, kCondition, "Has target", "Condition", "HasTarget", true, false },
+    { kIsColumnMode, kCondition, "In column mode", "Condition", "IsColumnMode", true, false },
+    { kIsFormationMode, kCondition, "In formation mode", "Condition", "IsFormationMode", true, false },
+    { kIsFullStrength, kCondition, "Is full strength", "Condition", "IsFullStrength", true, false },
+    { kIsHalfStrength, kCondition, "Is half strength", "Condition", "IsHalfStrength", true, false },
+    { kIsHq, kCondition, "Is HQ", "Condition", "IsHq", true, false },
+    { kIsIndirectFireUnit, kCondition, "Is indirect fire unit", "Condition", "IsIndirectFireUnit", true, false },
+    { kIsLowStrength, kCondition, "Is low strength", "Condition", "IsLowStrength", true, false },
+    { kIsSupportUnit, kCondition, "Is support unit", "Condition", "IsSupportUnit", true, false },
+    { kIsUnderFire, kCondition, "Is under fire", "Condition", "IsUnderFire", true, false },
+    { kMorale, kCondition, "Morale over X", "Condition", "IsMmoraleOver", true, true },
+    { kFatigue, kCondition, "Fatigue over X", "Condition", "IsFatigueOver", true, true },
+    { kSeesEnemies, kCondition, "Sees X enemies", "Condition", "SeesEnemies", true, true },
 
     // global conditions
-    { kAreAllObjectivesHeld, kCondition, "Are all objectives held", "Condition", "AreAllObjectivesHeld", true, false, 0 },
-    { kAttackScenario, kCondition, "Is attack scenario", "Condition", "AttackScenario", true, false, 0 },
-    { kBeginningOfGame, kCondition, "Is beginning of battle", "Condition", "BeginningOfBattle", true, false, 0 },
-    { kDefendScenario, kCondition, "Is defend battle", "Condition", "DefendScenario", true, false, 0 },
-    { kFirstTurn, kCondition, "Is first turn", "Condition", "FirstTurn", true, false, 0 },
-    { kMeetingScenario, kCondition, "Is meeting engagement battle", "Condition", "MeetingScenario", true, false, 0 },
+    { kAreAllObjectivesHeld, kCondition, "Are all objectives held", "Condition", "AreAllObjectivesHeld", true, false },
+    { kAttackScenario, kCondition, "Is attack scenario", "Condition", "AttackScenario", true, false },
+    { kBeginningOfGame, kCondition, "Is beginning of battle", "Condition", "BeginningOfBattle", true, false },
+    { kDefendScenario, kCondition, "Is defend battle", "Condition", "DefendScenario", true, false },
+    { kFirstTurn, kCondition, "Is first turn", "Condition", "FirstTurn", true, false },
+    { kMeetingScenario, kCondition, "Is meeting engagement battle", "Condition", "MeetingScenario", true, false },
 
     // organization conditions
-    { kIsHeadquarterAlive, kCondition, "Is headquarter alive", "Condition", "IsHeadquarterAlive", true, false, 0 },
-    { kShouldAdvance, kCondition, "Should advance", "Condition", "ShouldAdvance", true, false, 0 },
-    { kShouldHold, kCondition, "Should hold", "Condition", "ShouldHold", true, false, 0 },
-    { kShouldTakeObjective, kCondition, "Should take objective", "Condition", "ShouldTakeObjective", true, false, 0 },
+    { kIsHeadquarterAlive, kCondition, "Is headquarter alive", "Condition", "IsHeadquarterAlive", true, false },
+    { kShouldAdvance, kCondition, "Should advance", "Condition", "ShouldAdvance", true, false },
+    { kShouldHold, kCondition, "Should hold", "Condition", "ShouldHold", true, false },
+    { kShouldTakeObjective, kCondition, "Should take objective", "Condition", "ShouldTakeObjective", true, false },
 
     // actions
-    { kAssault, kAction, "Assault", "Action", "Assault", true, false, 0 },
-    { kBombard, kAction, "Bombard", "Action", "Bombard", true, false, 0 },
-    { kChangeMode, kAction, "Change mode", "Action", "ChangeMode", true, false, 0 },
-    { kFaceNearestEnemy, kAction, "Face nearest enemy", "Action", "FaceNearestEnemy", true, false, 0 },
-    { kFallBack, kAction, "Fall back", "Action", "FallBack", true, false, 0 },
-    { kFire, kAction, "Fire", "Action", "Fire", true, false, 0 },
-    { kHold, kAction, "Hold", "Action", "Hold", true, false, 0 },
-    { kMoveForward, kAction, "Move forward", "Action", "MoveForward", true, false, 0 },
-    { kRally, kAction, "Rally subordinates", "Action", "Rally", true, false, 0 },
-    { kTakeObjective, kAction, "Take objective", "Action", "TakeObjective", true, false, 0 },
+    { kAssault, kAction, "Assault", "Action", "Assault", true, false },
+    { kBombard, kAction, "Bombard", "Action", "Bombard", true, false },
+    { kChangeMode, kAction, "Change mode", "Action", "ChangeMode", true, false },
+    { kFaceNearestEnemy, kAction, "Face nearest enemy", "Action", "FaceNearestEnemy", true, false },
+    { kFallBack, kAction, "Fall back", "Action", "FallBack", true, false },
+    { kFire, kAction, "Fire", "Action", "Fire", true, false },
+    { kHold, kAction, "Hold", "Action", "Hold", true, false },
+    { kMoveForward, kAction, "Move forward", "Action", "MoveForward", true, false },
+    { kRally, kAction, "Rally subordinates", "Action", "Rally", true, false },
+    { kTakeObjective, kAction, "Take objective", "Action", "TakeObjective", true, false },
 
 };
 
@@ -160,7 +159,7 @@ class Node : public QTreeWidgetItem {
 public:
 
     Node (const NodeData & data, QTreeWidget *parent) : QTreeWidgetItem(parent), m_id(m_nextId++), m_data(data), m_value(0) {
-         setup();
+        setup();
     }
 
     Node (const NodeData & data, int value) : m_id(m_nextId++), m_data(data), m_value(value) {
@@ -215,17 +214,21 @@ public:
         m_value = value;
     }
 
-
-private:
+    void setData (const NodeData & data) {
+        m_data = data;
+    }
 
     void setup () {
-        if ( m_data.m_typeText.contains( "X")) {
+        if ( ! m_data.m_hasValue ) {
+            setText( 0, m_data.m_typeText );
+        }
+        else if ( ! m_data.m_typeText.contains( "X")) {
+            setText( 0, m_data.m_typeText );
+        }
+        else {
             QString type = m_data.m_typeText;
             type.replace( "X", QString::number(m_value) );
             setText( 0, type );
-        }
-        else {
-            setText( 0, m_data.m_typeText );
         }
 
         setText( 1, m_data.m_categoryText );
@@ -258,6 +261,9 @@ private:
             setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled );
         }
     }
+
+
+private:
 
     int m_id;
     static int m_nextId;
