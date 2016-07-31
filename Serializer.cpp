@@ -50,15 +50,14 @@ Node * Serializer::load (const QString & filename) {
 
         // split into parts
         QStringList parts = line.split( " ", QString::SkipEmptyParts );
-        if ( parts.size() != 5 ) {
-            continue;
-        }
 
         // extract all data
         id = parts[0].toInt();
         parentId = parts[1].toInt();
         nodeType = parts[2].toInt();
         value = parts[3];
+
+        // the 5th part is the serialization id and is not used. The root item does not even have it
 
         // any parent?
         if ( parentId != -1 ) {
