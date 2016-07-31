@@ -40,7 +40,8 @@ Node * Serializer::load (const QString & filename) {
 
     QTextStream stream( &file );
 
-    int id, parentId, nodeType, value;
+    int id, parentId, nodeType;
+    QString value;
     Node * root;
     Node * node;
 
@@ -57,7 +58,7 @@ Node * Serializer::load (const QString & filename) {
         id = parts[0].toInt();
         parentId = parts[1].toInt();
         nodeType = parts[2].toInt();
-        value = parts[3].toInt();
+        value = parts[3];
 
         // any parent?
         if ( parentId != -1 ) {

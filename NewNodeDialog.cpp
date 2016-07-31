@@ -30,7 +30,7 @@ NewNodeDialog::NewNodeDialog(Node * node, QWidget *parent) : QDialog(parent), ui
 
     // finally set the value as typeChanged() above sets it to 0
     if ( m_node ) {
-        ui->value->setValue( node->getValue() );
+        ui->value->setText( node->getValue() );
     }
 
     connect( ui->category, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)) );
@@ -48,15 +48,15 @@ NodeData NewNodeDialog::getNodedata () const {
 }
 
 
-int NewNodeDialog::getValue () const {
-    return ui->value->value();
+QString NewNodeDialog::getValue () const {
+    return ui->value->text();
 }
 
 
 void NewNodeDialog::categoryChanged (int category) {
     ui->type->clear();
 
-    for ( unsigned int index = 0; index < kUnusedMax - 1; ++index ) {
+    for ( unsigned int index = 0; index < kUnusedMax; ++index ) {
         NodeData & data( nodeData[ index] );
         if ( data.m_category == category ) {
             ui->type->addItem( data.m_typeText, data.m_type );
@@ -69,7 +69,7 @@ void NewNodeDialog::typeChanged (int index) {
     NodeData & data( nodeData[ ui->type->currentData().toInt()] );
 
     ui->value->setEnabled( data.m_hasValue );
-    ui->value->setValue( 0 );
+    ui->value->clear();
 }
 
 
@@ -79,6 +79,6 @@ void NewNodeDialog::updateNode () {
         return;
     }
 
-    m_node->setData( nodeData[ ui->type->currentData().toInt()] );
-    m_node->setValue( ui->value->value() );
+    m_node->setNodeData( nodeData[ ui->type->currentData().toInt()] );
+    m_node->setValue( ui->value->text() );
 }

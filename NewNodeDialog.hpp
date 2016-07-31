@@ -18,7 +18,7 @@ public:
 
 
     NodeData getNodedata () const;
-    int getValue () const;
+    QString getValue () const;
 
 
 private slots:

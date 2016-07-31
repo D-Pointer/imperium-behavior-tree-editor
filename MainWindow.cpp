@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QApplication>
 #include <QStandardPaths>
+#include <QInputDialog>
 
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
@@ -189,5 +190,18 @@ void MainWindow::editNode () {
 
 
 void MainWindow::includeSubtree () {
-    qDebug() << "MainWindow::includeSubtree";
+    QTreeWidgetItem * parent = ui->tree->currentItem();
+    if ( ! parent ) {
+        qDebug() << "MainWindow::includeSubtree: no current item";
+        return;
+    }
+
+    bool ok;
+    QString filename = QInputDialog::getText(this, "Include Subtree",
+                                         "Subree filename:", QLineEdit::Normal,
+                                         "", &ok);
+    if (ok && !filename.isEmpty()) {
+        Node * node = new Node( nodeData[kIncludeSubtree], filename, parent );
+        parent->setExpanded( true );
+    }
 }

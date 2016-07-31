@@ -8,6 +8,7 @@ enum NodeCategory {
     kComposite,
     kCondition,
     kDecorator,
+    kInclude,
     kRoot,
 };
 
@@ -72,6 +73,9 @@ enum NodeType {
     kMoveForward,
     kRally,
     kTakeObjective,
+
+    // inclide
+    kIncludeSubtree,
 
     // last unused item
     kUnusedMax
@@ -150,6 +154,8 @@ static NodeData nodeData[] = {
     { kRally, kAction, "Rally subordinates", "Action", "Rally", true, false },
     { kTakeObjective, kAction, "Take objective", "Action", "TakeObjective", true, false },
 
+     // include
+    { kIncludeSubtree, kInclude, "Include subtree X", "Include", "Include", true, true },
 };
 
 /**
@@ -158,15 +164,11 @@ static NodeData nodeData[] = {
 class Node : public QTreeWidgetItem {
 public:
 
-    Node (const NodeData & data, QTreeWidget *parent) : QTreeWidgetItem(parent), m_id(m_nextId++), m_data(data), m_value(0) {
+    Node (const NodeData & data, QTreeWidget *parent) : QTreeWidgetItem(parent), m_id(m_nextId++), m_data(data), m_value("") {
         setup();
     }
 
-    Node (const NodeData & data, int value) : m_id(m_nextId++), m_data(data), m_value(value) {
-        setup();
-    }
-
-    Node (const NodeData & data, int value, QTreeWidgetItem *parent) : QTreeWidgetItem(parent), m_id(m_nextId++), m_data(data), m_value(value) {
+    Node (const NodeData & data, const QString & value, QTreeWidgetItem *parent=nullptr) : QTreeWidgetItem(parent), m_id(m_nextId++), m_data(data), m_value(value) {
         setup();
     }
 
@@ -206,15 +208,15 @@ public:
         return m_data.m_hasValue;
     }
 
-    int getValue () const {
+    const QString & getValue () const {
         return m_value;
     }
 
-    void setValue (int value) {
+    void setValue (const QString & value) {
         m_value = value;
     }
 
-    void setData (const NodeData & data) {
+    void setNodeData (const NodeData & data) {
         m_data = data;
     }
 
@@ -227,7 +229,7 @@ public:
         }
         else {
             QString type = m_data.m_typeText;
-            type.replace( "X", QString::number(m_value) );
+            type.replace( "X", m_value );
             setText( 0, type );
         }
 
@@ -250,6 +252,10 @@ public:
             setForeground( 0, QBrush( Qt::darkGray) );
             setForeground( 1, QBrush( Qt::darkGray) );
             break;
+        case kInclude:
+            setForeground( 0, QBrush( Qt::darkMagenta) );
+            setForeground( 1, QBrush( Qt::darkMagenta) );
+            break;
         case kRoot:
             break;
         }
@@ -268,8 +274,7 @@ private:
     int m_id;
     static int m_nextId;
     NodeData m_data;
-    int m_value;
+    QString m_value;
 };
-
 
 #endif // NODE_TYPES_HPP
