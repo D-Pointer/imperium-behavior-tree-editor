@@ -19,6 +19,7 @@ public:
 
     NodeData getNodedata () const;
     QString getValue () const;
+    QString getComment () const;
 
 
 private slots:

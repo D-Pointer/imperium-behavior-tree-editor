@@ -41,7 +41,7 @@ Node * Serializer::load (const QString & filename) {
     QTextStream stream( &file );
 
     int id, parentId, nodeType;
-    QString value;
+    QString value, comment;
     Node * root;
     Node * node;
 
@@ -50,25 +50,54 @@ Node * Serializer::load (const QString & filename) {
 
         // split into parts
         QStringList parts = line.split( " ", QString::SkipEmptyParts );
+        QString key = parts.takeFirst();
 
-        // extract all data
-        id = parts[0].toInt();
-        parentId = parts[1].toInt();
-        nodeType = parts[2].toInt();
-        value = parts[3];
+        // what did we get?
+        if ( key == "id" ) {
+            // new node starts, clear all data that is not always present
+            value = "";
+            comment = "";
 
-        // the 5th part is the serialization id and is not used. The root item does not even have it
-
-        // any parent?
-        if ( parentId != -1 ) {
-            node = new Node( nodeData[ nodeType ], value, nodes[ parentId ] );
+            id = parts.first().toInt();
         }
+
+        else if ( key == "parent" ) {
+            parentId = parts.first().toInt();
+        }
+
+        else if ( key == "type" ) {
+            nodeType = parts.first().toInt();
+        }
+
+        else if ( key== "class" ) {
+            // skip
+        }
+
+        else if ( key == "value" ) {
+            value = parts.join( " " );
+        }
+
+        else if ( key == "comment" ) {
+            comment = parts.join( " " );
+
+            // now the node is complete
+            if ( parentId != -1 ) {
+                node = new Node( nodeData[ nodeType ], value, nodes[ parentId ] );
+            }
+            else {
+                node = new Node( nodeData[ nodeType ], value );
+                root = node;
+            }
+
+            node->setComment( comment );
+            node->setup();
+
+            nodes[ id ] = node;
+        }
+
         else {
-            node = new Node( nodeData[ nodeType ], value );
-            root = node;
+            qDebug() << "unknown key: " << key;
         }
-
-        nodes[ id ] = node;
     }
 
     return root;
@@ -76,7 +105,12 @@ Node * Serializer::load (const QString & filename) {
 
 
 void Serializer::writeNode (Node * node, Node * parent, QTextStream & stream) {
-    stream << node->getId() << " " << (parent ? parent->getId() : -1 ) << " " << node->getType() << " " << node->getValue() << " " << node->getSerializationId() << endl;
+    stream << "id " << node->getId() << endl
+           << "parent " << (parent ? parent->getId() : -1 ) << endl
+           << "type " << node->getType() << endl
+           << "class " << node->getSerializationId() << endl
+           << "value " << node->getValue() << endl
+           << "comment " << node->getComment() << endl;
 
     // save all children
     for ( int index = 0; index < node->childCount(); ++index ) {

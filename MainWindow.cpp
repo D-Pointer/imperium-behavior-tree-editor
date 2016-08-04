@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->m_includeSubtreeAction, &QAction::triggered, this, &MainWindow::includeSubtree );
 
     // create the root
-    m_root = new Node( nodeData[kRootType], ui->tree );
+    m_root = new Node( nodeData[kSequence], ui->tree );
 }
 
 
@@ -48,17 +48,36 @@ MainWindow::~MainWindow() {
 }
 
 
-void MainWindow::newTree () {
-    if ( QMessageBox::question( this, "Confirm", "Really create a new tree?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes ) {
-        ui->tree->clear();
-        m_root = new Node( nodeData[kRootType], ui->tree );
+void MainWindow::closeEvent(QCloseEvent * event) {
+    if ( isWindowModified() ) {
+        if ( QMessageBox::question( this, "Confirm", "You have unsaved changes,\nreally quit?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No ) {
+            event->ignore();
+            return;
+        }
     }
+
+    event->accept();
+}
+
+
+void MainWindow::newTree () {
+    if ( isWindowModified() ) {
+        if ( QMessageBox::question( this, "Confirm", "You have unsaved changes,\nreally create a new tree?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No ) {
+            return;
+        }
+    }
+
+    ui->tree->clear();
+    m_root = new Node( nodeData[kSequence], ui->tree );
+    setWindowModified( false );
 }
 
 
 void MainWindow::openTree () {
-    if ( QMessageBox::question( this, "Confirm", "Really open a tree?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No ) {
-        return;
+    if ( isWindowModified() ) {
+        if ( QMessageBox::question( this, "Confirm", "You have unsaved changes,\nreally open a tree?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No ) {
+            return;
+        }
     }
 
     QString filename = QFileDialog::getOpenFileName(this, "Open tree",
@@ -77,13 +96,14 @@ void MainWindow::openTree () {
     if ( ! m_root ) {
         // failed...
         ui->tree->clear();
-        m_root = new Node( nodeData[kRootType], ui->tree );
+        m_root = new Node( nodeData[kSequence], ui->tree );
     }
     else {
         ui->tree->addTopLevelItem( m_root );
     }
 
     ui->tree->expandAll();
+    setWindowModified( false );
 }
 
 
@@ -96,6 +116,9 @@ void MainWindow::saveTree () {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     if ( ! Serializer().save( m_root, m_filename ) ) {
         // failed...
+    }
+    else {
+        setWindowModified( false );
     }
 
     QApplication::restoreOverrideCursor();
@@ -116,9 +139,13 @@ void MainWindow::saveTreeAs () {
 
 
 void MainWindow::quitEditor () {
-    if ( QMessageBox::question( this, "Confirm", "Really quit?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes ) {
-       close();
+    if ( isWindowModified() ) {
+        if ( QMessageBox::question( this, "Confirm", "You have unsaved changes,\nreally quit?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No ) {
+            return;
+        }
     }
+
+    close();
 }
 
 
@@ -157,7 +184,21 @@ void MainWindow::newNode () {
     if ( dialog.exec() == QDialog::Accepted ) {
         NodeData data = dialog.getNodedata();
         Node * node = new Node( data, dialog.getValue(), item);
+        node->setComment( dialog.getComment() );
+        node->setup();
+
+        // an if-node?
+        if ( node->getType() == kIf ) {
+            // prepopulate it
+            new Node( nodeData[kCanAssault], "", node );
+            new Node( nodeData[kSequence], "", node );
+            new Node( nodeData[kSequence], "", node );
+        }
+
+        node->setExpanded( true );
         item->setExpanded( true );
+
+        setWindowModified( true );
     }
 }
 
@@ -169,8 +210,14 @@ void MainWindow::deleteNode () {
         return;
     }
 
+    // don't delete the root
+    if ( node->isRoot() ) {
+        return;
+    }
+
     if ( QMessageBox::question( this, "Confirm", QString("Really delete the '%1' node?").arg(node->getTypeText()), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes ) {
         delete node;
+        setWindowModified( true );
     }
 }
 
@@ -185,6 +232,30 @@ void MainWindow::editNode () {
     NewNodeDialog dialog( node );
     if ( dialog.exec() == QDialog::Accepted ) {
         node->setup();
+
+        // make sure that leaves do not have children
+        if ( node->childCount() > node->getMaxChildCount() ) {
+            QMessageBox::warning(this, "Warning", "This node now has too many children!\nRemoving the extra child nodes.");
+            while ( node->childCount() > node->getMaxChildCount() ) {
+                node->removeChild( node->child( node->childCount() - 1 ) );
+            }
+        }
+
+        // an if-node?
+        if ( node->getType() == kIf && node->childCount() < node->getMaxChildCount() ) {
+            // need a first condition?
+            if ( node->childCount() == 0 ) {
+                new Node( nodeData[kCanAssault], "", node );
+            }
+
+            // add in sequence nodes for the rest
+            while ( node->childCount() < node->getMaxChildCount() ) {
+                new Node( nodeData[kSequence], "", node );
+            }
+        }
+
+        node->setExpanded( true );
+        setWindowModified( true );
     }
 }
 
@@ -203,5 +274,6 @@ void MainWindow::includeSubtree () {
     if (ok && !filename.isEmpty()) {
         Node * node = new Node( nodeData[kIncludeSubtree], filename, parent );
         parent->setExpanded( true );
+        setWindowModified( true );
     }
 }

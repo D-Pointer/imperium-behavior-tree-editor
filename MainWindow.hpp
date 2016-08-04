@@ -18,6 +18,11 @@ public:
     ~MainWindow();
 
 
+protected:
+
+    void closeEvent(QCloseEvent * event);
+
+
 private slots:
 
     void newTree ();
