@@ -117,7 +117,7 @@ static NodeData nodeData[] = {
     { kCanAssault, kCondition, "Can assault", "Condition", "CanAssault", 0, false },
     { kCanRally, kCondition, "Can rally", "Condition", "CanRally", 0, false },
     { kHasAmmo, kCondition, "Has ammo", "Condition", "HasAmmo", 0, false },
-    { kHasEnemiesInFieldOfFire, kCondition, "Has X enemies in field of fire", "Condition", "HasEnemiesInFof", 0, true },
+    { kHasEnemiesInFieldOfFire, kCondition, "Has X enemies in field of fire", "Condition", "HasEnemiesInFieldOfFire", 0, true },
     { kHasEnemiesInRange, kCondition, "Has X enemies in range", "Condition", "HasEnemiesInRange", 0, true },
     { kHasHq, kCondition, "Has HQ", "Condition", "HasHq", 0, false },
     { kHasMission, kCondition, "Has mission", "Condition", "HasMission", 0, false },
